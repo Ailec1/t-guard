@@ -12,7 +12,8 @@ while true; do
                     "8" "Setup IRIS <-> Wazuh Integration" \
                     "9" "Setup MISP <-> Wazuh Integration" \
                     "10" "Show Status" \
-                    "11" "Delete All Containers, Images, Volumes, and Networks" 3>&1 1>&2 2>&3)
+                    "11" "Restart Wazuh" \
+                    "12" "Delete All Containers, Images, Volumes, and Networks" 3>&1 1>&2 2>&3)
     # Script version 1.0 updated 15 November 2023
     # Depending on the chosen option, execute the corresponding command
     case $OPTION in
@@ -101,6 +102,11 @@ while true; do
         ;;
 
     11)
+        cd wazuh
+        sudo docker compose restart
+        ;;
+
+    12)
         # Stop all containers
         sudo docker stop $(sudo docker ps -a -q)
         # Delete all containers
