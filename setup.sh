@@ -12,6 +12,7 @@ while true; do
                     "8" "Setup IRIS <-> Wazuh Integration" \
                     "9" "Setup MISP <-> Wazuh Integration" \
                     "10" "Show Status" 3>&1 1>&2 2>&3)
+                    "11" "Delete All Containers, Images, Volumes, and Networks")
     # Script version 1.0 updated 15 November 2023
     # Depending on the chosen option, execute the corresponding command
     case $OPTION in
@@ -19,6 +20,7 @@ while true; do
         sudo apt-get update -y
         sudo apt-get upgrade -y
         sudo apt-get install wget curl nano git unzip -y
+        # sudo apt-get install wget curl nano git unzip ca-certificates -y
         ;;
     2)
         # Check if Docker is installed
@@ -29,13 +31,30 @@ while true; do
             curl -fsSL https://get.docker.com -o get-docker.sh
             sudo sh get-docker.sh
             sudo systemctl enable docker.service && sudo systemctl enable containerd.service
+
+            # # Install Docker
+            # # Add Docker's official GPG key:
+            # sudo install -m 0755 -d /etc/apt/keyrings
+            # sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+            # sudo chmod a+r /etc/apt/keyrings/docker.asc
+            # # Add the repository to Apt sources:
+            # echo \
+            # "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+            # $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+            # sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+            # sudo apt-get update
+            # # Install Docker Packages
+            # sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
         fi
         ;;
     3)
         cd wazuh
-        sudo docker network create shared-network
-        sudo docker compose -f generate-indexer-certs.yml run --rm generator
-        sudo docker compose up -d
+        sysctl -w vm.max_map_count=262144
+        sudo docker-compose -f generate-indexer-certs.yml run --rm generator
+        sudo docker-compose up -d
+        # # sudo docker network create shared-network
+        # sudo docker compose -f generate-indexer-certs.yml run --rm generator
+        # sudo docker compose up -d
         ;;
     4)
         cd shuffle
@@ -81,6 +100,23 @@ while true; do
         ;;
     10)
         sudo docker ps
+        ;;
+
+    11)
+        # Stop all containers
+        sudo docker stop $(sudo docker ps -a -q)
+        # Delete all containers
+        sudo docker rm -f $(sudo docker ps -a -q)
+        # Delete all images
+        sudo docker rmi -f $(sudo docker images -q)
+        # Delete all volumes
+        sudo docker volume rm $(sudo docker volume ls -q)
+        # Delete all networks
+        sudo docker network rm $(sudo docker network ls -q)
+        # Delete Docker
+        sudo systemctl disable docker.service && sudo systemctl disable containerd.service
+        sudo apt-get purge docker-ce docker-ce-cli containerd.io -y
+        sudo rm -rf /var/lib/docker
         ;;
 esac
     # Give option to go back to the previous menu or exit
