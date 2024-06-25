@@ -50,11 +50,9 @@ while true; do
     3)
         cd wazuh
         sysctl -w vm.max_map_count=262144
-        sudo docker-compose -f generate-indexer-certs.yml run --rm generator
-        sudo docker-compose up -d
         # # sudo docker network create shared-network
-        # sudo docker compose -f generate-indexer-certs.yml run --rm generator
-        # sudo docker compose up -d
+        sudo docker compose -f generate-indexer-certs.yml run --rm generator
+        sudo docker compose up -d
         ;;
     4)
         cd shuffle
