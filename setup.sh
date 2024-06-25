@@ -114,6 +114,7 @@ while true; do
         # Delete all networks
         sudo docker network rm $(sudo docker network ls -q)
         # Delete Docker
+        sudo systemctl stop docker.socket
         sudo systemctl disable docker.service && sudo systemctl disable containerd.service
         sudo apt-get purge docker-ce docker-ce-cli containerd.io -y
         sudo rm -rf /var/lib/docker
