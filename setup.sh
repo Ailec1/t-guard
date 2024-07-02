@@ -11,9 +11,10 @@ while true; do
                     "7" "Install MISP" \
                     "8" "Setup IRIS <-> Wazuh Integration" \
                     "9" "Setup MISP <-> Wazuh Integration" \
-                    "10" "Show Status" \
-                    "11" "Restart Wazuh" \
-                    "12" "Delete All Containers, Images, Volumes, and Networks" 3>&1 1>&2 2>&3)
+                    "10" "Setup AbuseIPDB <-> Wazuh Integration" \
+                    "11" "Show Status" \
+                    "12" "Restart Wazuh" \
+                    "13" "Delete All Containers, Images, Volumes, and Networks" 3>&1 1>&2 2>&3)
     # Script version 1.0 updated 15 November 2023
     # Depending on the chosen option, execute the corresponding command
     case $OPTION in
@@ -98,15 +99,21 @@ while true; do
         cd wazuh && sudo docker compose restart
         ;;
     10)
+        cp wazuh/custom-integrations/custom-abuseipdb.py /var/lib/docker/volumes/wazuh_wazuh_integrations/_data/custom-abuseipdb.py
+        sudo docker exec -ti wazuh-wazuh.manager-1 chown root:wazuh /var/ossec/integrations/custom-abuseipdb.py
+        sudo docker exec -ti wazuh-wazuh.manager-1 chmod 750 /var/ossec/integrations/custom-abuseipdb.py
+        cd wazuh && sudo docker compose restart
+        ;;
+    11)
         sudo docker ps
         ;;
 
-    11)
+    12)
         cd wazuh
         sudo docker compose restart
         ;;
 
-    12)
+    13)
         # Stop all containers
         sudo docker stop $(sudo docker ps -a -q)
         # Delete all containers
