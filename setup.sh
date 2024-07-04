@@ -93,12 +93,12 @@ while true; do
         cp wazuh/custom-integrations/custom-misp.py /var/lib/docker/volumes/wazuh_wazuh_integrations/_data/custom-misp.py
         sudo docker exec -ti wazuh-wazuh.manager-1 chown root:wazuh /var/ossec/integrations/custom-misp.py
         sudo docker exec -ti wazuh-wazuh.manager-1 chmod 750 /var/ossec/integrations/custom-misp.py
-        cp wazuh/custom-integrations/local_rules.xml /var/lib/docker/volumes/wazuh_wazuh_etc/_data/rules/local_rules.xml
-        sudo docker exec -ti wazuh-wazuh.manager-1 chown wazuh:wazuh /var/ossec/etc/rules/local_rules.xml
-        sudo docker exec -ti wazuh-wazuh.manager-1 chmod 550 /var/ossec/etc/rules/local_rules.xml
-        cp wazuh/custom-integrations/local_decoder.xml /var/lib/docker/volumes/wazuh_wazuh_etc/_data/decoders/local_decoder.xml
-        sudo docker exec -ti wazuh-wazuh.manager-1 chown wazuh:wazuh /var/ossec/etc/decoders/local_decoder.xml
-        sudo docker exec -ti wazuh-wazuh.manager-1 chmod 550 /var/ossec/etc/decoders/local_decoder.xml
+        # cp wazuh/custom-integrations/local_rules.xml /var/lib/docker/volumes/wazuh_wazuh_etc/_data/rules/local_rules.xml
+        # sudo docker exec -ti wazuh-wazuh.manager-1 chown wazuh:wazuh /var/ossec/etc/rules/local_rules.xml
+        # sudo docker exec -ti wazuh-wazuh.manager-1 chmod 550 /var/ossec/etc/rules/local_rules.xml
+        # cp wazuh/custom-integrations/local_decoder.xml /var/lib/docker/volumes/wazuh_wazuh_etc/_data/decoders/local_decoder.xml
+        # sudo docker exec -ti wazuh-wazuh.manager-1 chown wazuh:wazuh /var/ossec/etc/decoders/local_decoder.xml
+        # sudo docker exec -ti wazuh-wazuh.manager-1 chmod 550 /var/ossec/etc/decoders/local_decoder.xml
         cd wazuh && sudo docker compose restart
         ;;
     10)
