@@ -51,9 +51,7 @@ while true; do
         ;;
     3)
         cd wazuh
-        sudo su
-        sysctl -w vm.max_map_count=262144
-        exit
+        sudo sysctl -w vm.max_map_count=262144
         sudo docker network create shared-network
         sudo docker compose -f generate-indexer-certs.yml run --rm generator
         sudo docker compose up -d
